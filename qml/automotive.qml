@@ -499,14 +499,17 @@ ApplicationWindow {
 
                         GlowingLabel {
                             id: temperatureValueLabel
-                            text: qsTr("24°C")
+                            //text: qsTr("24°C")
+                            text: carStore.temperature + "°C " + carStore.actualTemperature + "°C"
                             font.pixelSize: fontSizeLarge
                             anchors.right: parent.right
                         }
                     }
 
                     Slider {
-                        value: 0.35
+                        from: 18
+                        to: 30
+                        onValueChanged: carActions.setTemperature(value)
                         Layout.fillWidth: true
                     }
 

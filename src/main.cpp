@@ -55,6 +55,12 @@
 #include <QQuickStyle>
 #include <QIcon>
 
+#include "flux_qt/dispatcher.h"
+
+#include "actions/caractions.h"
+#include "middlewares/carmiddleware.h"
+#include "store/carstore.h"
+
 int main(int argc, char *argv[])
 {
     QGuiApplication::setApplicationName("Automotive");
@@ -67,6 +73,21 @@ int main(int argc, char *argv[])
     QIcon::setThemeName("automotive");
 
     QQmlApplicationEngine engine;
+    auto context = engine.rootContext();
+
+    // setup flux_qt
+    car::CarActions carActions;
+
+    car::CarMiddleware carMiddleware(&carActions);
+    flux_qt::Dispatcher::instance().registerMiddleware(&carMiddleware);
+
+    car::CarStore carStore;
+    flux_qt::Dispatcher::instance().registerStore(&carStore);
+
+    // register store(s) and action providers to qml engine
+    context->setContextProperty("carActions", &carActions);
+    context->setContextProperty("carStore", &carStore);
+
     engine.load(QUrl("qrc:/qml/automotive.qml"));
     if (engine.rootObjects().isEmpty())
         return -1;
