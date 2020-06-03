@@ -12,6 +12,7 @@ namespace car
 
     void CarMiddleware::onActualTemperatureChanged(int actualTemperature)
     {
+        // dispatch action
         carActions->setActualTemperature(actualTemperature);
     }
 
